@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="bg-gradient-to-br from-blue-50 to-indigo-50">
+  <div class="max-w-6xl mx-auto px-4 py-24">
+    <h1 class="text-4xl font-bold tracking-tight text-gray-900">Welcome to My Portfolio</h1>
+    <p class="mt-4 text-lg text-gray-700">Explore projects, learn about my experience, and get in touch.</p>
+    <div class="mt-8">
+      <a href="{% url 'project_list' %}" class="inline-flex items-center rounded-md bg-blue-600 px-6 py-3 text-white font-medium hover:bg-blue-700">View Projects</a>
+      <a href="#" class="inline-flex items-center rounded-md border border-gray-300 px-6 py-3 ml-4 font-medium text-gray-900 hover:bg-gray-100">Contact Me</a>
+    </div>
+  </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="bg-gradient-to-br from-blue-50 to-indigo-50 min-h-screen py-12">
+  <div class="max-w-2xl mx-auto px-4">
+    <div class="mb-6">
+      <a href="{% url 'project_list' %}" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Projects
+      </a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-8">
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900 mb-6">{{ title }}</h1>
+
+      {% if form.errors %}
+        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+          <p class="font-medium">Please correct the errors below:</p>
+          <ul class="mt-2 list-disc list-inside">
+            {% for field in form %}
+              {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+              {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+
+      <form method="post" class="space-y-6">
+        {% csrf_token %}
+        
+        <div>
+          <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+            {{ form.title.label }}
+          </label>
+          {{ form.title }}
+          {% if form.title.help_text %}
+            <p class="mt-1 text-sm text-gray-500">{{ form.title.help_text }}</p>
+          {% endif %}
+        </div>
+
+        <div>
+          <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+            {{ form.description.label }}
+          </label>
+          {{ form.description }}
+          {% if form.description.help_text %}
+            <p class="mt-1 text-sm text-gray-500">{{ form.description.help_text }}</p>
+          {% endif %}
+        </div>
+
+        <div class="flex space-x-4 pt-4">
+          <button type="submit" class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Save Project
+          </button>
+          <a href="{% url 'project_list' %}" class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 transition-colors">
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
