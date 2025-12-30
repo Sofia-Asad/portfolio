@@ -52,46 +52,69 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-## Deployment to Vercel
+## Deployment to Render
 
-**Important Note**: Vercel is not ideal for Django applications, especially with SQLite databases. Consider using:
-- **Railway** (Recommended for Django)
-- **Render**
-- **PythonAnywhere**
-- **Heroku**
+Render is an excellent platform for deploying Django applications. Follow these steps:
 
-If you still want to deploy to Vercel:
+### Step 1: Create a Render Account
+1. Go to [render.com](https://render.com) and sign up/login
+2. Connect your GitHub account
 
-1. Install Vercel CLI:
-```bash
-npm i -g vercel
-```
+### Step 2: Create a New Web Service
+1. Click "New +" → "Web Service"
+2. Connect your GitHub repository: `Sofia-Asad/portfolio`
+3. Configure the service:
+   - **Name**: `portfolio-django` (or your preferred name)
+   - **Environment**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate`
+   - **Start Command**: `gunicorn portfolio_project.wsgi:application`
 
-2. Login to Vercel:
-```bash
-vercel login
-```
+### Step 3: Set Environment Variables
+In the Render dashboard, go to "Environment" and add:
+- `SECRET_KEY`: Generate a new secret key (you can use: `python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"`)
+- `DEBUG`: `False`
+- `ALLOWED_HOSTS`: `your-app-name.onrender.com` (Render will provide this)
 
-3. Deploy:
-```bash
-vercel
-```
+### Step 4: (Optional) Add PostgreSQL Database
+1. In Render dashboard, click "New +" → "PostgreSQL"
+2. Create a free PostgreSQL database
+3. Copy the "Internal Database URL"
+4. Add environment variable: `DATABASE_URL` with the copied URL
+5. The app will automatically use PostgreSQL instead of SQLite
 
-4. Set environment variables in Vercel dashboard:
-   - `DJANGO_SECRET_KEY`: Your Django secret key
-   - `DEBUG`: Set to `False` for production
+### Step 5: Deploy
+1. Click "Create Web Service"
+2. Render will automatically build and deploy your application
+3. Your app will be available at `https://your-app-name.onrender.com`
 
-5. Run migrations on Vercel:
-```bash
-vercel env pull .env.local
-python manage.py migrate
-```
+### Using render.yaml (Alternative Method)
+If you prefer using the `render.yaml` file:
+1. The `render.yaml` file is already configured in the repository
+2. In Render dashboard, select "Apply render.yaml" when creating the service
+3. Render will automatically read the configuration
 
-**Limitations on Vercel**:
-- SQLite database won't persist (data will be lost on each deployment)
-- Consider using PostgreSQL or another database service
-- Static files need proper configuration
-- Some Django features may not work in serverless environment
+### Post-Deployment
+1. Create a superuser:
+   - Go to your Render service → "Shell"
+   - Run: `python manage.py createsuperuser`
+2. Access your admin panel at: `https://your-app-name.onrender.com/admin/`
+
+## Deployment to Other Platforms
+
+### Railway
+- Excellent Django support
+- Free tier available
+- Easy PostgreSQL setup
+
+### PythonAnywhere
+- Beginner-friendly
+- Free tier available
+- Good for learning
+
+### Heroku
+- Popular platform
+- Requires credit card for free tier
+- Good documentation
 
 ## Project Structure
 
